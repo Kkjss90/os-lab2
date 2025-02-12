@@ -22,16 +22,6 @@
                 "isDefault": true
             },
             "detail": "Задача создана отладчиком."
-        },
-        {
-            "label": "Build os-lab2",
-            "type": "shell",
-            "command": "cmake --build build",
-            "problemMatcher": ["$gcc"],
-            "group": {
-                "kind": "build",
-                "isDefault": true
-            }
         }
     ],
     "version": "2.0.0"

@@ -9,16 +9,16 @@
 constexpr int FILE_SIZE = 256;
 
 int main(int argc, char* argv[]) {
-    if (argc != 4) {
-        std::cerr << "Usage: " << argv[0] << " <input_file> <output_file> <repeat_count>\n";
+    if (argc != 3) {
+        std::cerr << "Usage: " << argv[0] << " <file_name> <repeat_count>\n";
         return EXIT_FAILURE;
     }
 
-    const std::string input_file = argv[1];
-    const std::string output_file = argv[2];
-    const int repeat_count = std::stoi(argv[3]);
+    const std::string file_name = argv[1];
+    const int repeat_count = std::stoi(argv[2]);
+    const std::string output_file = file_name + ".sorted";  // Define an output file with a suffix
 
-    int fd = open(input_file.c_str(), O_RDWR | O_CREAT, 0644);
+    int fd = open(file_name.c_str(), O_RDWR | O_CREAT, 0644);
     if (fd < 0) {
         perror("Error opening file");
         return EXIT_FAILURE;
@@ -29,16 +29,15 @@ int main(int argc, char* argv[]) {
 
     if (file_size == 0) {
         std::cout << "File not found or is empty. Generating file of size " << FILE_SIZE << " MB...\n";
-        generate_file(input_file, FILE_SIZE, 1);
+        generate_file(file_name, FILE_SIZE, 1);
     } else {
         std::cout << "File already exists and is of size " << file_size << " bytes.\n";
     }
 
     clock_t start_time = clock();
 
-    std::cout << "Sorting file using EMA-sort with MRU cache...\n";
-    MRUCache cache(100);
-    ema_sort(input_file, output_file, repeat_count, cache);
+    std::cout << "Sorting file using EMA-sort...\n";
+    ema_sort(file_name, output_file, repeat_count);  // Pass both input and output file names
 
     clock_t end_time = clock();
     double duration = static_cast<double>(end_time - start_time) / CLOCKS_PER_SEC;
